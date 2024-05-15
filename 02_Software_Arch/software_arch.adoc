@@ -6,12 +6,14 @@
 
 1. **Product Description**
 2. **Development Requiremnts**
-3. **Architecture Diagram**
+3. **Basic Diagram**
 4. **Description**
-5. **Module Diagram**
-6. **Module Descripion**
-7. **Change Requests**
-8. **Newly Proposed Architectures**
+5. **Sequence Diagram**
+6. **Description**
+7. **Module Diagram**
+8. **Module Descripion**
+9. **Change Requests**
+10. **Newly Proposed Architectures**
 
 === *Product Description*
 
@@ -83,7 +85,7 @@ To develop the Captioning App, the following requirements must be satisfied:
 
 Ensure all the above dependencies and tools are installed and properly configured in your development environment to successfully build and deploy the Captioning App.
 
-=== *Architecture Diagram*
+=== *Basic Diagram*
 
 [graphviz, captioning_architecture, svg]
 ----
@@ -190,3 +192,60 @@ digraph G {
 - **Instagram Auth:** Manages OAuth authentication with Instagram.
 
 This enhanced diagram and description offer a comprehensive view of the Captioning App's architecture, highlighting the interactions and functionalities of each component.
+
+<<<
+=== *Sequence Diagram*
+
+image::../../docs/generate_image_video_caption.png[Generate Image Video Caption Diagram]
+
+
+=== *Detailed Explanation of the Sequence Diagram*
+
+1. **User Request**:
+   - The user sends a GET request to the `/generate_image_video_caption` endpoint on the `FlaskApp` with parameters including `file_name`, `caption_size`, `context`, `style`, `num_hashtags`, `tone`, `social_media`, and `location`.
+
+2. **FlaskApp Checks Authorization Header**:
+   - The `FlaskApp` checks the authorization header of the request.
+
+   **Authorization Missing**:
+   - If the authorization header is missing, `FlaskApp` responds with a `401 Missing Authorization header` error and deactivates itself.
+
+   **Invalid Token**:
+   - If the authorization token is invalid, `FlaskApp` responds with a `403 Invalid token` error and deactivates itself.
+
+   **Valid Token**:
+   - If the authorization token is valid, `FlaskApp` proceeds to create a presigned URL for the file from `AwsS3`.
+
+3. **Creating Presigned URL**:
+   - `FlaskApp` requests `AwsS3` to create a presigned URL for the specified file.
+   - `AwsS3` returns the presigned URL to `FlaskApp`.
+
+4. **Determine File Type (Image or Video)**:
+   - `FlaskApp` determines if the file is an image or a video based on its extension.
+
+   **File is an Image**:
+   - `FlaskApp` sends a GET request to the presigned URL to fetch the image data using `Requests`.
+   - `Requests` returns the image data to `FlaskApp`.
+   - `FlaskApp` uses `PIL` to open the image data and convert it into an image object.
+   - `PIL` returns the image object to `FlaskApp`.
+   - `FlaskApp` sends the image object to `ImageCaptionGenerator` to generate a caption.
+   - `ImageCaptionGenerator` returns the generated caption JSON to `FlaskApp`.
+
+   **File is a Video**:
+   - `FlaskApp` sends a GET request to the presigned URL to fetch the video data using `Requests`.
+   - `Requests` returns the video data to `FlaskApp`.
+   - `FlaskApp` saves the video data to a temporary file.
+   - `FlaskApp` sends the video file path to `VideoCaptionGenerator` to generate a caption.
+   - `VideoCaptionGenerator` returns the generated caption JSON to `FlaskApp`.
+   - `FlaskApp` deletes the temporary video file.
+
+5. **Return Caption to User**:
+   - If the caption JSON is not `None`, `FlaskApp` responds to the user with the generated caption and the presigned URL.
+   - If the caption JSON is `None`, `FlaskApp` responds to the user with an error message stating "Couldn't find a caption".
+
+6. **End**:
+   - `FlaskApp` deactivates itself after completing the process.
+
+### Summary
+
+The sequence diagram outlines the process of generating captions for images or videos. The user sends a request to the `FlaskApp`, which checks for authorization and then interacts with `AwsS3` to fetch the file. Depending on the file type, the `FlaskApp` uses either `ImageCaptionGenerator` or `VideoCaptionGenerator` to generate a caption and then returns the caption to the user.
