@@ -1,0 +1,192 @@
+:imagesdir: ./images
+:diagram: true
+= Software Architecture: AI-Powered Image Captioning and Social Media Posting Software
+
+== Table of Contents
+
+1. **Product Description**
+2. **Development Requiremnts**
+3. **Architecture Diagram**
+4. **Description**
+5. **Module Diagram**
+6. **Module Descripion**
+7. **Change Requests**
+8. **Newly Proposed Architectures**
+
+=== *Product Description*
+
+#### Overview
+The Captioning App, formerly known as CapgenAIze, harnesses the power of artificial intelligence, large language models (LLM), and advanced image recognition to generate captions for images and videos (Reels). These captions are optimized for sharing on social media platforms such as Instagram, Facebook, X (formerly Twitter), and LinkedIn. The app is also ideal for product marketing purposes.
+
+#### Features
+
+- **AI-Powered Caption Generation:** Utilizes cutting-edge AI and LLM to create relevant and engaging captions.
+- **Image and Video Recognition:** Analyzes both images and videos (up to 30 seconds) to understand the content and context.
+- **Social Media Optimization:** Generates captions tailored for various social media platforms, ensuring maximum engagement.
+
+#### How to Use
+
+1. **Upload Media:**
+   - **Image:** Simply upload your image.
+   - **Video:** Upload a video (up to 30 seconds in length).
+
+2. **Select Preferences:**
+   - **Tone:** Choose from various tones such as Artistic, Professional, etc.
+   - **Caption Size:** Select the desired size of the caption: small, medium, or large.
+   - **Context (Optional):** Provide additional context for the image or video if desired.
+
+3. **Caption Generation:**
+   - **For Images:** Captions are generated within seconds.
+   - **For Videos:** Captions are generated within 5-10 seconds.
+
+#### Benefits
+
+- **Efficiency:** Quickly generate captions without manual effort.
+- **Customization:** Tailor captions to fit different tones and sizes to match your needs.
+- **Engagement:** Enhance social media posts with AI-driven, relevant captions.
+
+#### Applications
+
+- **Social Media:** Perfect for Instagram, Facebook, X, LinkedIn, and more.
+- **Product Marketing:** Create compelling captions for marketing materials.
+
+The Captioning App streamlines the process of creating captions, enabling users to focus on sharing and promoting their content more effectively.
+
+=== *Development Requirements*
+
+To develop the Captioning App, the following requirements must be satisfied:
+
+#### Software Requirements
+
+1. **Python Version:**
+   - Python 3.10 (All dependencies are not compatible with Python 3.11)
+
+2. **Python Libraries:**
+   - Flask==2.2.3
+   - openai==0.27.2
+   - opencv_python==4.7.0.72
+   - Pillow==9.5.0
+   - streamlit==1.21.0
+   - torch==2.0.0
+   - transformers==4.27.4
+   - boto3
+   - pytest
+   - pytest-mock
+   - dnspython
+   - email-validator
+   - PyJWT
+
+#### System Requirements
+
+1. **Docker:** To containerize and manage the application.
+2. **curl:** For transferring data with URLs.
+
+Ensure all the above dependencies and tools are installed and properly configured in your development environment to successfully build and deploy the Captioning App.
+
+=== *Architecture Diagram*
+
+[graphviz, captioning_architecture, svg]
+----
+digraph G {
+    rankdir=LR;
+    node [shape=box, style=filled, fontcolor=black, color=lightgrey];
+
+    subgraph cluster0 {
+        label = "Captioning App Architecture";
+        style = dashed;
+
+        Flask_App [label="Flask App\n(Captioning API)", color=lightblue];
+        Session [label="Session Management\n(Flask-Session)", color=lightgreen];
+        CORS [label="CORS\n(Flask-CORS)", color=lightyellow];
+
+        Flask_App -> Session [label="Manages User Sessions", color=grey];
+        Flask_App -> CORS [label="Handles CORS", color=grey];
+
+        subgraph cluster1 {
+            label = "Auth & User Management";
+            style = rounded;
+            
+            RegisterUser [label="Register User", color=lightcoral];
+            VerifyEmail [label="Verify Email", color=lightcoral];
+            AuthenticateUser [label="Authenticate User", color=lightcoral];
+            AuthenticateAsGuest [label="Authenticate As Guest", color=lightcoral];
+            ForgetPassword [label="Forget Password", color=lightcoral];
+            Database [label="Database\n(User Data)", color=lightgrey];
+
+            Flask_App -> RegisterUser [color=grey];
+            Flask_App -> VerifyEmail [color=grey];
+            Flask_App -> AuthenticateUser [color=grey];
+            Flask_App -> AuthenticateAsGuest [color=grey];
+            Flask_App -> ForgetPassword [color=grey];
+            RegisterUser -> Database [color=grey];
+            VerifyEmail -> Database [color=grey];
+            AuthenticateUser -> Database [color=grey];
+            AuthenticateAsGuest -> Database [color=grey];
+            ForgetPassword -> Database [color=grey];
+        }
+
+        subgraph cluster2 {
+            label = "Caption Generation";
+            style = rounded;
+
+            ImageCaption [label="Image Caption\nGenerator", color=lightpink];
+            VideoCaption [label="Video Caption\nGenerator", color=lightpink];
+            SceneDetector [label="Scene Detector", color=lightcyan];
+            SceneSaver [label="Scene Saver", color=lightcyan];
+            Chatbot [label="Chatbot\n(OpenAI)", color=lightpurple];
+
+            Flask_App -> ImageCaption [label="Generate Image Caption", color=grey];
+            Flask_App -> VideoCaption [label="Generate Video Caption", color=grey];
+            VideoCaption -> SceneDetector [color=grey];
+            VideoCaption -> SceneSaver [color=grey];
+            ImageCaption -> Chatbot [color=grey];
+            VideoCaption -> Chatbot [color=grey];
+        }
+
+        subgraph cluster3 {
+            label = "Storage & External Services";
+            style = rounded;
+
+            AwsS3 [label="AWS S3", color=lightorange];
+            InstagramAuth [label="Instagram\nAuth", color=lightgoldenrod];
+
+            Flask_App -> AwsS3 [label="Store & Retrieve Files", color=grey];
+            Flask_App -> InstagramAuth [label="Instagram OAuth", color=grey];
+        }
+    }
+}
+----
+
+=== *Description*
+
+#### Flask App (Captioning API) - Light Blue
+- The core component managing all application endpoints and coordinating requests and responses.
+- Handles routes for user registration, login, media uploads, and caption generation.
+
+#### Session Management (Flask-Session) - Light Green
+- Manages user sessions to maintain state across different requests.
+- Ensures secure session handling.
+
+#### CORS (Flask-CORS) - Light Yellow
+- Manages Cross-Origin Resource Sharing to control resource access across different domains.
+
+#### Auth & User Management - Light Coral
+- **Register User:** Handles user registration.
+- **Verify Email:** Manages email verification.
+- **Authenticate User:** Manages user login.
+- **Authenticate As Guest:** Allows guest login.
+- **Forget Password:** Handles password reset requests.
+- **Database:** Stores user information and authentication data.
+
+#### Caption Generation - Light Pink
+- **Image Caption Generator:** Generates captions for images.
+- **Video Caption Generator:** Generates captions for videos.
+- **Scene Detector:** Detects scenes in videos for captioning.
+- **Scene Saver:** Saves detected scenes.
+- **Chatbot (OpenAI):** Provides AI-driven language models for caption generation.
+
+#### Storage & External Services - Light Orange and Light Goldenrod
+- **AWS S3:** Stores and retrieves media files.
+- **Instagram Auth:** Manages OAuth authentication with Instagram.
+
+This enhanced diagram and description offer a comprehensive view of the Captioning App's architecture, highlighting the interactions and functionalities of each component.

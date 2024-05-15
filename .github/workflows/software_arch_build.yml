@@ -33,11 +33,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y asciidoctor
-
+          sudo apt-get install -y graphviz
       - name: Convert AsciiDoc to PDF and HTML
         run: |
-          asciidoctor -r asciidoctor-pdf -b pdf 02_Software_Arch/sofware_arch.adoc -o docs/software_arch.pdf
-          asciidoctor -o docs/software_arch.html 02_Software_Arch/sofware_arch.adoc    
+          asciidoctor -r asciidoctor-pdf -r asciidoctor-diagram -b pdf 02_Software_Arch/software_arch.adoc -o docs/software_arch.pdf
+          asciidoctor -o docs/software_arch.html 02_Software_Arch/software_arch.adoc    
       - name: Commit and Push PDF
         run: |
           git config --local user.email "action@github.com"
