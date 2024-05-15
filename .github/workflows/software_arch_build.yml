@@ -36,8 +36,8 @@ jobs:
 
       - name: Convert AsciiDoc to PDF and HTML
         run: |
-          asciidoctor -r asciidoctor-pdf -b pdf 02_Software_Arch/sofwarearch.adoc -o docs/software_arch.pdf
-          asciidoctor -o docs/software_arch.html 02_Software_Arch/sofwarearch.adoc    
+          asciidoctor -r asciidoctor-pdf -b pdf 02_Software_Arch/sofware_arch.adoc -o docs/software_arch.pdf
+          asciidoctor -o docs/software_arch.html 02_Software_Arch/sofware_arch.adoc    
       - name: Commit and Push PDF
         run: |
           git config --local user.email "action@github.com"
