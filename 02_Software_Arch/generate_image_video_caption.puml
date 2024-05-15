@@ -1,0 +1,87 @@
+@startuml generate_image_video_caption
+
+!define RECTANGLE_COLOR #E6F7FF
+!define ACTOR_COLOR #FF9933
+!define FLASK_COLOR #66FF66
+!define AWS_COLOR #FFCC00
+!define CAPTION_COLOR #CC99FF
+!define PIL_COLOR #FF6666
+!define REQUESTS_COLOR #3399FF
+
+skinparam actor {
+    BackgroundColor ACTOR_COLOR
+    BorderColor black
+}
+
+skinparam participant {
+    BackgroundColor RECTANGLE_COLOR
+    BorderColor black
+}
+
+actor User ACTOR_COLOR
+
+participant "Flask App" as FlaskApp FLASK_COLOR
+participant "AwsS3" as AwsS3 AWS_COLOR
+participant "ImageCaptionGenerator" as ImageCaptionGenerator CAPTION_COLOR
+participant "VideoCaptionGenerator" as VideoCaptionGenerator CAPTION_COLOR
+participant "PIL (Image Library)" as PIL PIL_COLOR
+participant "requests (HTTP Library)" as Requests REQUESTS_COLOR
+
+User -> FlaskApp: GET /generate_image_video_caption\n?file_name=<file_name>\n&caption_size=<caption_size>\n&context=<context>\n&style=<style>\n&num_hashtags=<num_hashtags>\n&tone=<tone>\n&social_media=<social_media>\n&location=<location>
+activate FlaskApp
+
+FlaskApp -> FlaskApp: Check Authorization Header
+alt Authorization Header Missing
+    FlaskApp -[ACTOR_COLOR]> User: 401 Missing Authorization header
+    deactivate FlaskApp
+else Invalid Token
+    FlaskApp -[ACTOR_COLOR]> User: 403 Invalid token
+    deactivate FlaskApp
+else Valid Token
+    FlaskApp -[AWS_COLOR]> AwsS3: create_presigned_url(S3_BUCKET_NAME, file_name)
+    activate AwsS3
+    AwsS3 -[AWS_COLOR]> FlaskApp: presigned_url
+    deactivate AwsS3
+
+    FlaskApp -> FlaskApp: Determine if file is image or video
+    alt File is an image
+        FlaskApp -[REQUESTS_COLOR]> Requests: GET presigned_url
+        activate Requests
+        Requests -[REQUESTS_COLOR]> FlaskApp: Image Data
+        deactivate Requests
+
+        FlaskApp -[PIL_COLOR]> PIL: Image.open(image_data)
+        activate PIL
+        PIL -[PIL_COLOR]> FlaskApp: Image Object
+        deactivate PIL
+
+        FlaskApp -[CAPTION_COLOR]> ImageCaptionGenerator: generate_caption(location, image_object, caption_size, context, style, num_hashtags, tone, social_media)
+        activate ImageCaptionGenerator
+        ImageCaptionGenerator -[CAPTION_COLOR]> FlaskApp: Caption JSON
+        deactivate ImageCaptionGenerator
+    else File is a video
+        FlaskApp -[REQUESTS_COLOR]> Requests: GET presigned_url
+        activate Requests
+        Requests -[REQUESTS_COLOR]> FlaskApp: Video Data
+        deactivate Requests
+
+        FlaskApp -> FlaskApp: Save Video Data to Temporary File
+
+        FlaskApp -[CAPTION_COLOR]> VideoCaptionGenerator: generate_caption(location, video_file_path, caption_size, context, style, num_hashtags, tone, social_media)
+        activate VideoCaptionGenerator
+        VideoCaptionGenerator -[CAPTION_COLOR]> FlaskApp: Caption JSON
+        deactivate VideoCaptionGenerator
+
+        FlaskApp -> FlaskApp: Delete Temporary Video File
+    end
+
+    alt Caption JSON is not None
+        FlaskApp -[ACTOR_COLOR]> User: JSON {"Caption": response_json["choices"][0]["message"]["content"], "File_URL": presigned_url}
+    else
+        FlaskApp -[ACTOR_COLOR]> User: JSON {"Caption": "Couldn't find a caption"}
+    end
+end
+
+deactivate FlaskApp
+
+@enduml

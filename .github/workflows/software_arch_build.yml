@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,18 +35,24 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y asciidoctor
           sudo apt-get install -y graphviz
+          sudo apt-get install -y plantuml
+
+      - name: Generate PlantUML Diagram
+        run: plantuml -tpng 02_Software_Arch/generate_image_video_caption.puml -o docs/
+
       - name: Convert AsciiDoc to PDF and HTML
         run: |
           asciidoctor -r asciidoctor-pdf -r asciidoctor-diagram -b pdf 02_Software_Arch/software_arch.adoc -o docs/software_arch.pdf
-          asciidoctor -o docs/software_arch.html 02_Software_Arch/software_arch.adoc    
-      - name: Commit and Push PDF
+          asciidoctor -o docs/software_arch.html 02_Software_Arch/software_arch.adoc
+
+      - name: Commit and Push Documentation
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add docs/software_arch.pdf
           git add docs/software_arch.html
-          git commit -m "Update project proposal PDF and HTML documentation"
+          git add docs/generate_image_video_caption.png
+          git commit -m "Update project proposal PDF, HTML documentation, and PlantUML diagram"
           git -c http.extraHeader="AUTHORIZATION: basic $(echo -n x-access-token:${GITHUB_TOKEN} | base64)" push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
