@@ -1,0 +1,51 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure Git
+        run: git config --global advice.addIgnoredFile false
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+      
+      - name: Install Gem dependencies
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y asciidoctor
+
+      - name: Convert AsciiDoc to PDF and HTML
+        run: |
+          asciidoctor -r asciidoctor-pdf -b pdf 02_Software_Arch/sofwarearch.adoc -o docs/software_arch.pdf
+          asciidoctor -o docs/software_arch.html 02_Software_Arch/sofwarearch.adoc    
+      - name: Commit and Push PDF
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/software_arch.pdf
+          git add docs/software_arch.html
+          git commit -m "Update project proposal PDF and HTML documentation"
+          git -c http.extraHeader="AUTHORIZATION: basic $(echo -n x-access-token:${GITHUB_TOKEN} | base64)" push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
