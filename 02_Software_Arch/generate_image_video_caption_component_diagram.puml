@@ -1,0 +1,82 @@
+@startuml
+
+!define FLASK_COLOR #66FF66
+!define AWS_COLOR #FFCC00
+!define CAPTION_COLOR #CC99FF
+!define PIL_COLOR #FF6666
+!define REQUESTS_COLOR #3399FF
+!define LOGIN_COLOR #FF9999
+!define UTIL_COLOR #FFCC99
+
+skinparam component {
+    BackgroundColor #E6F7FF
+    BorderColor black
+    FontSize 12
+}
+
+skinparam linetype ortho
+
+package "Flask Application" {
+    [Flask App] <<Flask>> FLASK_COLOR
+}
+
+package "AWS Services" {
+    [AwsS3] <<Aws>> AWS_COLOR
+}
+
+package "Caption Generation" {
+    [ImageCaptionGenerator] <<Component>> CAPTION_COLOR
+    [VideoCaptionGenerator] <<Component>> CAPTION_COLOR
+    [Chatbot] <<Component>> CAPTION_COLOR
+}
+
+package "Image Processing" {
+    [PIL (Image Library)] <<Component>> PIL_COLOR
+    [SceneDetector] <<Component>> PIL_COLOR
+    [SceneSaver] <<Component>> PIL_COLOR
+}
+
+package "HTTP Library" {
+    [Requests] <<Component>> REQUESTS_COLOR
+}
+
+package "User Management" {
+    [RegisterUser] <<Component>> LOGIN_COLOR
+    [VerifyEmail] <<Component>> LOGIN_COLOR
+    [AuthenticateUser] <<Component>> LOGIN_COLOR
+    [AuthenticateAsGuest] <<Component>> LOGIN_COLOR
+    [ForgetPassword] <<Component>> LOGIN_COLOR
+    [Database] <<Component>> LOGIN_COLOR
+}
+
+package "Utilities" {
+    [Util] <<Component>> UTIL_COLOR
+}
+
+[Flask App] --> [AwsS3] : Uses
+[Flask App] --> [ImageCaptionGenerator] : Uses
+[Flask App] --> [VideoCaptionGenerator] : Uses
+[Flask App] --> [Requests] : Uses
+[Flask App] --> [PIL (Image Library)] : Uses
+[Flask App] --> [SceneDetector] : Uses
+[Flask App] --> [SceneSaver] : Uses
+[Flask App] --> [RegisterUser] : Uses
+[Flask App] --> [VerifyEmail] : Uses
+[Flask App] --> [AuthenticateUser] : Uses
+[Flask App] --> [AuthenticateAsGuest] : Uses
+[Flask App] --> [ForgetPassword] : Uses
+[Flask App] --> [Database] : Uses
+[Flask App] --> [Util] : Uses
+
+[ImageCaptionGenerator] --> [Chatbot] : Uses
+[VideoCaptionGenerator] --> [Chatbot] : Uses
+[VideoCaptionGenerator] --> [SceneDetector] : Uses
+[VideoCaptionGenerator] --> [SceneSaver] : Uses
+
+[RegisterUser] --> [Database] : Uses
+[VerifyEmail] --> [Database] : Uses
+[AuthenticateUser] --> [Database] : Uses
+[AuthenticateAsGuest] --> [Database] : Uses
+[ForgetPassword] --> [Database] : Uses
+
+@enduml
