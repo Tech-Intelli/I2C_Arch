@@ -54,6 +54,7 @@ jobs:
           git add docs/software_arch.pdf
           git add docs/software_arch.html
           git add docs/generate_image_video_caption.png
+          git add docs/generate_image_video_caption_component_diagram.puml
           git commit -m "Update project proposal PDF, HTML documentation, and PlantUML diagram"
           git -c http.extraHeader="AUTHORIZATION: basic $(echo -n x-access-token:${GITHUB_TOKEN} | base64)" push
         env:
