@@ -10,7 +10,7 @@
 4. **Description**
 5. **Sequence Diagram**
 6. **Description**
-7. **Module Diagram**
+7. **Component Diagram**
 8. **Module Descripion**
 9. **Change Requests**
 10. **Newly Proposed Architectures**
@@ -249,3 +249,8 @@ image::../../docs/generate_image_video_caption.png[Generate Image Video Caption 
 ### Summary
 
 The sequence diagram outlines the process of generating captions for images or videos. The user sends a request to the `FlaskApp`, which checks for authorization and then interacts with `AwsS3` to fetch the file. Depending on the file type, the `FlaskApp` uses either `ImageCaptionGenerator` or `VideoCaptionGenerator` to generate a caption and then returns the caption to the user.
+
+<<<
+=== *Component Diagram -- Complete Application*
+
+image::../../docs/generate_image_video_caption_component_diagram.png[Generate Image Video Caption Component Diagram]

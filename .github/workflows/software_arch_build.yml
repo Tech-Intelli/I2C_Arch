@@ -38,8 +38,10 @@ jobs:
           sudo apt-get install -y plantuml
 
       - name: Generate PlantUML Diagram
-        run: plantuml -tpng 02_Software_Arch/generate_image_video_caption.puml -o ../docs/
-
+        run: |
+          for file in 02_Software_Arch/*.puml; do
+            plantuml -tpng $file -o ../docs/
+          done
       - name: Convert AsciiDoc to PDF and HTML
         run: |
           asciidoctor -r asciidoctor-pdf -r asciidoctor-diagram -b pdf 02_Software_Arch/software_arch.adoc -o docs/software_arch.pdf
