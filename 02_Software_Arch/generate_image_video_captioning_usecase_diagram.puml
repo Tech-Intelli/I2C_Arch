@@ -1,0 +1,25 @@
+@startuml generate_image_video_captioning_usecase_diagram
+
+actor User
+actor "Social Media Platform" as SMP
+actor "OAuth Provider" as OAuth
+
+rectangle "Image Upload and Caption Generation System" {
+  User --> (Upload Image)
+  User --> (Generate Caption)
+  User --> (Customize Caption)
+  User --> (Share Image)
+  User --> (Schedule Post)
+  User --> (Regenerate Caption)
+  User --> (Use Caption Templates)
+  User --> (Recommend Hashtags)
+  User --> (Recommend Emojis)
+  
+  (Share Image) --> SMP
+  (Schedule Post) --> SMP
+  (Share Image) --> (Authenticate User)
+  (Schedule Post) --> (Authenticate User)
+  (Authenticate User) <-- OAuth
+}
+
+@enduml

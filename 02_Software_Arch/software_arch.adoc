@@ -254,3 +254,6 @@ The sequence diagram outlines the process of generating captions for images or v
 === *Component Diagram -- Complete Application*
 
 image::../../docs/generate_image_video_caption_component_diagram.png[Generate Image Video Caption Component Diagram]
+
+=== *Usecase Diagram*
+image::../../docs/generate_image_video_captioning_usecase_diagram.png[Generate Image Video Caption Usecase Diagram]
