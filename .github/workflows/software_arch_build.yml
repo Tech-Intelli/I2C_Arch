@@ -53,9 +53,8 @@ jobs:
           git config --local user.name "GitHub Action"
           git add docs/software_arch.pdf
           git add docs/software_arch.html
-          git add docs/generate_image_video_caption.png
-          git add docs/generate_image_video_caption_component_diagram.png
-          git commit -m "Update project proposal PDF, HTML documentation, and PlantUML diagram"
+          git add docs/*.png
+          git commit -m "Update project proposal PDF, HTML documentation, and PlantUML diagrams"
           git -c http.extraHeader="AUTHORIZATION: basic $(echo -n x-access-token:${GITHUB_TOKEN} | base64)" push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
