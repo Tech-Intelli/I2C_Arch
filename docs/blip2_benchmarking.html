@@ -5,7 +5,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.23">
-<title>Software Architecture: AI-Powered Image Captioning and Social Media Posting Software</title>
+<meta name="description" content="A Benchmarking comparison among pretrain_flant5xxl, pretrain_flant5xl and caption_coco_flant5xl">
+<meta name="keywords" content="BLIP2, Image Captioning, LLM, Benchmarking">
+<meta name="author" content="Author: Dipanjan Das">
+<title>BLIP-2 Models Benchmarking</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -436,557 +439,312 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article">
 <div id="header">
-<h1>Software Architecture: AI-Powered Image Captioning and Social Media Posting Software</h1>
+<h1>BLIP-2 Models Benchmarking</h1>
+<div class="details">
+<span id="author" class="author">Author: Dipanjan Das</span><br>
+<span id="revdate">Co-Author</span>
+<br><span id="revremark">Sayantan Roy</span>
+</div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_table_of_contents">Table of Contents</h2>
+<h2 id="_section_1_introduction">Section 1: Introduction</h2>
 <div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Product Description</strong></p>
-</li>
-<li>
-<p><strong>Development Requiremnts</strong></p>
-</li>
-<li>
-<p><strong>Basic Diagram</strong></p>
-</li>
-<li>
-<p><strong>Description</strong></p>
-</li>
-<li>
-<p><strong>Sequence Diagram</strong></p>
-</li>
-<li>
-<p><strong>Description</strong></p>
-</li>
-<li>
-<p><strong>Component Diagram</strong></p>
-</li>
-<li>
-<p><strong>Module Descripion</strong></p>
-</li>
-<li>
-<p><strong>Change Requests</strong></p>
-</li>
-<li>
-<p><strong>Newly Proposed Architectures</strong></p>
-</li>
-</ol>
-</div>
-<div class="sect2">
-<h3 id="_product_description"><strong>Product Description</strong></h3>
-<div class="sect3">
-<h4 id="_overview">Overview</h4>
 <div class="paragraph">
-<p>The Captioning App, formerly known as CapgenAIze, harnesses the power of artificial intelligence, large language models (LLM), and advanced image recognition to generate captions for images and videos (Reels). These captions are optimized for sharing on social media platforms such as Instagram, Facebook, X (formerly Twitter), and LinkedIn. The app is also ideal for product marketing purposes.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_features">Features</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>AI-Powered Caption Generation:</strong> Utilizes cutting-edge AI and LLM to create relevant and engaging captions.</p>
-</li>
-<li>
-<p><strong>Image and Video Recognition:</strong> Analyzes both images and videos (up to 30 seconds) to understand the content and context.</p>
-</li>
-<li>
-<p><strong>Social Media Optimization:</strong> Generates captions tailored for various social media platforms, ensuring maximum engagement.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_how_to_use">How to Use</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Upload Media:</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Image:</strong> Simply upload your image.</p>
-</li>
-<li>
-<p><strong>Video:</strong> Upload a video (up to 30 seconds in length).</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>Select Preferences:</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Tone:</strong> Choose from various tones such as Artistic, Professional, etc.</p>
-</li>
-<li>
-<p><strong>Caption Size:</strong> Select the desired size of the caption: small, medium, or large.</p>
-</li>
-<li>
-<p><strong>Context (Optional):</strong> Provide additional context for the image or video if desired.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>Caption Generation:</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>For Images:</strong> Captions are generated within seconds.</p>
-</li>
-<li>
-<p><strong>For Videos:</strong> Captions are generated within 5-10 seconds.</p>
-</li>
-</ul>
-</div>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_benefits">Benefits</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Efficiency:</strong> Quickly generate captions without manual effort.</p>
-</li>
-<li>
-<p><strong>Customization:</strong> Tailor captions to fit different tones and sizes to match your needs.</p>
-</li>
-<li>
-<p><strong>Engagement:</strong> Enhance social media posts with AI-driven, relevant captions.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_applications">Applications</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Social Media:</strong> Perfect for Instagram, Facebook, X, LinkedIn, and more.</p>
-</li>
-<li>
-<p><strong>Product Marketing:</strong> Create compelling captions for marketing materials.</p>
-</li>
-</ul>
+<p>The orignal paper of BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models
+has been implemented by Salesforce Lavis project. The Lavis project provides a documentation about how to use BLIP2 but it lacks
+a benchmarking section. It also doesn&#8217;t explain how to work with these model when the compute power is relatively on the lower end.
+In this article we will explain how to circumvent some computation problem along with 3 (out of 7 models) model&#8217;s benchmarking.
+The Lavis project provides a comprehensive guide of <a href="https://github.com/salesforce/LAVIS/blob/main/examples/blip2_instructed_generation.ipynb">instructed vision-to-language generation</a> in a Notebook-Demo.</p>
 </div>
 <div class="paragraph">
-<p>The Captioning App streamlines the process of creating captions, enabling users to focus on sharing and promoting their content more effectively.</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_development_requirements"><strong>Development Requirements</strong></h3>
-<div class="paragraph">
-<p>To develop the Captioning App, the following requirements must be satisfied:</p>
-</div>
-<div class="sect3">
-<h4 id="_software_requirements">Software Requirements</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Python Version:</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Python 3.10 (All dependencies are not compatible with Python 3.11)</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>Python Libraries:</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Flask==2.2.3</p>
-</li>
-<li>
-<p>openai==0.27.2</p>
-</li>
-<li>
-<p>opencv_python==4.7.0.72</p>
-</li>
-<li>
-<p>Pillow==9.5.0</p>
-</li>
-<li>
-<p>streamlit==1.21.0</p>
-</li>
-<li>
-<p>torch==2.0.0</p>
-</li>
-<li>
-<p>transformers==4.27.4</p>
-</li>
-<li>
-<p>boto3</p>
-</li>
-<li>
-<p>pytest</p>
-</li>
-<li>
-<p>pytest-mock</p>
-</li>
-<li>
-<p>dnspython</p>
-</li>
-<li>
-<p>email-validator</p>
-</li>
-<li>
-<p>PyJWT</p>
-</li>
-</ul>
-</div>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_system_requirements">System Requirements</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Docker:</strong> To containerize and manage the application.</p>
-</li>
-<li>
-<p><strong>curl:</strong> For transferring data with URLs.</p>
-</li>
-</ol>
+<p>The guide uses the default model <code>pretrain_flant5xxl</code>, which is the largest, around 48 GB.
+Without a doubt, this model performs the best, giving captions like:</p>
 </div>
 <div class="paragraph">
-<p>Ensure all the above dependencies and tools are installed and properly configured in your development environment to successfully build and deploy the Captioning App.</p>
+<p><em>*Write a romantic message that goes along with this photo.*</em></p>
+</div>
+<div class="paragraph">
+<p><em>*Love is like a sunset, it&#8217;s hard to see it coming, but when it does, it&#8217;s so beautiful.*</em></p>
+</div>
+<div class="paragraph">
+<p>However, the model warns the user by stating, <em>*Large RAM is required to load the larger models. Running on a GPU can optimize inference speed.*</em>
+without providing any context or explanation of the terms "Large RAM," "GPU," and "CPU" usage.</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_basic_diagram"><strong>Basic Diagram</strong></h3>
+<div class="sect1">
+<h2 id="_section_2_loading_blip2_captioning_models">Section 2: Loading BLIP2 Captioning models</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Lavis project provides 7 models for BLIP2 captioning. The models are listed below:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Model Name</th>
+<th class="tableblock halign-left valign-top">Parameter Count</th>
+<th class="tableblock halign-left valign-top">Estimated Size (in GB)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pretrain_flant5xxl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11 billion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~48.0 GB</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pretrain_flant5xl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3 billion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~15.0 GB</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">caption_coco_flant5xl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3 billion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~4.0 GB</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pretrain_opt2.7b</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.7 billion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~11.0 GB</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pretrain_opt6.7b</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6.7 billion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~26.0 GB</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">caption_coco_opt2.7b</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.7 billion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~11.0 GB</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">caption_coco_opt6.7b</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6.7 billion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~26.0 GB</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The Lavis project uses the pretrain_flant5xxl model to demonstrate the best-performing model.
+Following code snippet is suggested to use in order to load the pretrained model.</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre>digraph G {
-    rankdir=LR;
-    node [shape=box, style=filled, fontcolor=black, color=lightgrey];
-
-    subgraph cluster0 {
-        label = "Captioning App Architecture";
-        style = dashed;
-
-        Flask_App [label="Flask App\n(Captioning API)", color=lightblue];
-        Session [label="Session Management\n(Flask-Session)", color=lightgreen];
-        CORS [label="CORS\n(Flask-CORS)", color=lightyellow];
-
-        Flask_App -&gt; Session [label="Manages User Sessions", color=grey];
-        Flask_App -&gt; CORS [label="Handles CORS", color=grey];
-
-        subgraph cluster1 {
-            label = "Auth &amp; User Management";
-            style = rounded;
-
-            RegisterUser [label="Register User", color=lightcoral];
-            VerifyEmail [label="Verify Email", color=lightcoral];
-            AuthenticateUser [label="Authenticate User", color=lightcoral];
-            AuthenticateAsGuest [label="Authenticate As Guest", color=lightcoral];
-            ForgetPassword [label="Forget Password", color=lightcoral];
-            Database [label="Database\n(User Data)", color=lightgrey];
-
-            Flask_App -&gt; RegisterUser [color=grey];
-            Flask_App -&gt; VerifyEmail [color=grey];
-            Flask_App -&gt; AuthenticateUser [color=grey];
-            Flask_App -&gt; AuthenticateAsGuest [color=grey];
-            Flask_App -&gt; ForgetPassword [color=grey];
-            RegisterUser -&gt; Database [color=grey];
-            VerifyEmail -&gt; Database [color=grey];
-            AuthenticateUser -&gt; Database [color=grey];
-            AuthenticateAsGuest -&gt; Database [color=grey];
-            ForgetPassword -&gt; Database [color=grey];
-        }
-
-        subgraph cluster2 {
-            label = "Caption Generation";
-            style = rounded;
-
-            ImageCaption [label="Image Caption\nGenerator", color=lightpink];
-            VideoCaption [label="Video Caption\nGenerator", color=lightpink];
-            SceneDetector [label="Scene Detector", color=lightcyan];
-            SceneSaver [label="Scene Saver", color=lightcyan];
-            Chatbot [label="Chatbot\n(OpenAI)", color=lightpurple];
-
-            Flask_App -&gt; ImageCaption [label="Generate Image Caption", color=grey];
-            Flask_App -&gt; VideoCaption [label="Generate Video Caption", color=grey];
-            VideoCaption -&gt; SceneDetector [color=grey];
-            VideoCaption -&gt; SceneSaver [color=grey];
-            ImageCaption -&gt; Chatbot [color=grey];
-            VideoCaption -&gt; Chatbot [color=grey];
-        }
-
-        subgraph cluster3 {
-            label = "Storage &amp; External Services";
-            style = rounded;
-
-            AwsS3 [label="AWS S3", color=lightorange];
-            InstagramAuth [label="Instagram\nAuth", color=lightgoldenrod];
-
-            Flask_App -&gt; AwsS3 [label="Store &amp; Retrieve Files", color=grey];
-            Flask_App -&gt; InstagramAuth [label="Instagram OAuth", color=grey];
-        }
-    }
-}</pre>
+<pre class="highlight"><code class="language-python" data-lang="python">model, vis_processors, _ = load_model_and_preprocess(
+    name="blip2_t5", model_type="pretrain_flant5xxl", is_eval=True, device=device
+)</code></pre>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_description"><strong>Description</strong></h3>
-<div class="sect3">
-<h4 id="_flask_app_captioning_api_light_blue">Flask App (Captioning API) - Light Blue</h4>
-<div class="ulist">
-<ul>
-<li>
-<p>The core component managing all application endpoints and coordinating requests and responses.</p>
-</li>
-<li>
-<p>Handles routes for user registration, login, media uploads, and caption generation.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_session_management_flask_session_light_green">Session Management (Flask-Session) - Light Green</h4>
-<div class="ulist">
-<ul>
-<li>
-<p>Manages user sessions to maintain state across different requests.</p>
-</li>
-<li>
-<p>Ensures secure session handling.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_cors_flask_cors_light_yellow">CORS (Flask-CORS) - Light Yellow</h4>
-<div class="ulist">
-<ul>
-<li>
-<p>Manages Cross-Origin Resource Sharing to control resource access across different domains.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_auth_user_management_light_coral">Auth &amp; User Management - Light Coral</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Register User:</strong> Handles user registration.</p>
-</li>
-<li>
-<p><strong>Verify Email:</strong> Manages email verification.</p>
-</li>
-<li>
-<p><strong>Authenticate User:</strong> Manages user login.</p>
-</li>
-<li>
-<p><strong>Authenticate As Guest:</strong> Allows guest login.</p>
-</li>
-<li>
-<p><strong>Forget Password:</strong> Handles password reset requests.</p>
-</li>
-<li>
-<p><strong>Database:</strong> Stores user information and authentication data.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_caption_generation_light_pink">Caption Generation - Light Pink</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Image Caption Generator:</strong> Generates captions for images.</p>
-</li>
-<li>
-<p><strong>Video Caption Generator:</strong> Generates captions for videos.</p>
-</li>
-<li>
-<p><strong>Scene Detector:</strong> Detects scenes in videos for captioning.</p>
-</li>
-<li>
-<p><strong>Scene Saver:</strong> Saves detected scenes.</p>
-</li>
-<li>
-<p><strong>Chatbot (OpenAI):</strong> Provides AI-driven language models for caption generation.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_storage_external_services_light_orange_and_light_goldenrod">Storage &amp; External Services - Light Orange and Light Goldenrod</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>AWS S3:</strong> Stores and retrieves media files.</p>
-</li>
-<li>
-<p><strong>Instagram Auth:</strong> Manages OAuth authentication with Instagram.</p>
-</li>
-</ul>
 </div>
 <div class="paragraph">
-<p>This enhanced diagram and description offer a comprehensive view of the Captioning App&#8217;s architecture, highlighting the interactions and functionalities of each component.</p>
+<p>Unfortunately this code fails to load the model due to an error</p>
 </div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_sequence_diagram"><strong>Sequence Diagram</strong></h3>
-<div class="imageblock">
+<div class="listingblock">
 <div class="content">
-<img src="./../docs/generate_image_video_caption.png" alt="Generate Image Video Caption Diagram">
+<pre class="highlight"><code class="language-console" data-lang="console">OutOfMemoryError: CUDA out of memory. Tried to allocate 80.00 MiB (GPU 0; 8.00 GiB total capacity; 22.51 GiB
+already allocated; 0 bytes free; 22.68 GiB reserved in total by PyTorch) If reserved memory is &gt;&gt; allocated memory
+try setting max_split_size_mb to avoid fragmentation. See documentation for Memory Management and
+PYTORCH_CUDA_ALLOC_CONF</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>It is crucial to note that the error occurred with the below hardware specification:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Component</th>
+<th class="tableblock halign-left valign-top">Specification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CPU</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Intel&#174; Core&#8482; i7-7700 CPU @ 3.60GHz</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GPU</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NVIDIA GeForce GTX 1070</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GPU Memory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8 GB (GDDR5)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>We have circumvented this problem by implementing the following code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">import torch
+import os
+from torch.cuda.amp import autocast, GradScaler
+from accelerate import Accelerator
+
+torch.cuda.empty_cache()
+
+os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:128'
+
+accelerator = Accelerator(cpu=True)
+
+def clear_memory():
+    torch.cuda.empty_cache()
+    torch.cuda.synchronize()
+
+clear_memory()
+
+scaler = GradScaler()
+
+try:
+    with autocast():
+        model, vis_processors, _ = load_model_and_preprocess(
+            name="blip2_t5", model_type="pretrain_flant5xxl", is_eval=True, device="cpu"  # Load on CPU first
+        )
+
+    if hasattr(model, 'gradient_checkpointing_enable'):
+        model.gradient_checkpointing_enable()
+
+    model = accelerator.prepare(model)
+
+except RuntimeError as e:
+    print(f"Error during model loading: {e}")
+    clear_memory()</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_detailed_explanation_of_the_sequence_diagram"><strong>Detailed Explanation of the Sequence Diagram</strong></h3>
+<h3 id="_code_explanation">Code Explanation</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>User Request</strong>:</p>
+<p><code>torch.cuda.empty_cache()</code>:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The user sends a GET request to the <code>/generate_image_video_caption</code> endpoint on the <code>FlaskApp</code> with parameters including <code>file_name</code>, <code>caption_size</code>, <code>context</code>, <code>style</code>, <code>num_hashtags</code>, <code>tone</code>, <code>social_media</code>, and <code>location</code>.</p>
+<p>Clears the GPU memory cache to free up unused memory, helping to prevent out-of-memory errors.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p><strong>FlaskApp Checks Authorization Header</strong>:</p>
+<p><code>os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:128'</code>:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The <code>FlaskApp</code> checks the authorization header of the request.</p>
-<div class="literalblock">
-<div class="content">
-<pre>**Authorization Missing**:
-- If the authorization header is missing, `FlaskApp` responds with a `401 Missing Authorization header` error and deactivates itself.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>**Invalid Token**:
-- If the authorization token is invalid, `FlaskApp` responds with a `403 Invalid token` error and deactivates itself.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>**Valid Token**:
-- If the authorization token is valid, `FlaskApp` proceeds to create a presigned URL for the file from `AwsS3`.</pre>
-</div>
-</div>
+<p>Sets an environment variable to manage memory fragmentation by limiting the maximum size of memory allocation splits to 128 MB.</p>
+</li>
+<li>
+<p>Memory fragmentation occurs when the available memory is broken into small, non-contiguous blocks over time, making it difficult to allocate large contiguous memory blocks required by large models. By setting <code>max_split_size_mb</code>, we ensure that the memory allocator splits large allocations into smaller, more manageable chunks, reducing fragmentation and helping to make better use of the available memory. This setting helps avoid scenarios where large allocations fail due to insufficient contiguous free memory, even when there is enough total free memory.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p><strong>Creating Presigned URL</strong>:</p>
+<p><code>accelerator = Accelerator(cpu=True)</code>:</p>
 <div class="ulist">
 <ul>
 <li>
-<p><code>FlaskApp</code> requests <code>AwsS3</code> to create a presigned URL for the specified file.</p>
-</li>
-<li>
-<p><code>AwsS3</code> returns the presigned URL to <code>FlaskApp</code>.</p>
+<p>Initializes an <code>Accelerator</code> instance with CPU offloading enabled. This allows the model to offload some operations to the CPU, optimizing memory usage on the GPU.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p><strong>Determine File Type (Image or Video)</strong>:</p>
+<p><code>def clear_memory():</code>:</p>
 <div class="ulist">
 <ul>
 <li>
-<p><code>FlaskApp</code> determines if the file is an image or a video based on its extension.</p>
-<div class="literalblock">
-<div class="content">
-<pre>**File is an Image**:
-- `FlaskApp` sends a GET request to the presigned URL to fetch the image data using `Requests`.
-- `Requests` returns the image data to `FlaskApp`.
-- `FlaskApp` uses `PIL` to open the image data and convert it into an image object.
-- `PIL` returns the image object to `FlaskApp`.
-- `FlaskApp` sends the image object to `ImageCaptionGenerator` to generate a caption.
-- `ImageCaptionGenerator` returns the generated caption JSON to `FlaskApp`.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>**File is a Video**:
-- `FlaskApp` sends a GET request to the presigned URL to fetch the video data using `Requests`.
-- `Requests` returns the video data to `FlaskApp`.
-- `FlaskApp` saves the video data to a temporary file.
-- `FlaskApp` sends the video file path to `VideoCaptionGenerator` to generate a caption.
-- `VideoCaptionGenerator` returns the generated caption JSON to `FlaskApp`.
-- `FlaskApp` deletes the temporary video file.</pre>
-</div>
-</div>
+<p><code>clear_memory</code> to clear GPU memory and synchronize GPU operations.</p>
+</li>
+<li>
+<p><code>torch.cuda.empty_cache()</code>: Clears the GPU memory cache again to free up unused memory.</p>
+</li>
+<li>
+<p><code>torch.cuda.synchronize()</code>: Synchronizes the GPU operations, ensuring all pending operations are completed. This helps in accurately managing memory.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p><strong>Return Caption to User</strong>:</p>
+<p><code>clear_memory()</code>:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>If the caption JSON is not <code>None</code>, <code>FlaskApp</code> responds to the user with the generated caption and the presigned URL.</p>
-</li>
-<li>
-<p>If the caption JSON is <code>None</code>, <code>FlaskApp</code> responds to the user with an error message stating "Couldn&#8217;t find a caption".</p>
+<p>Calls the <code>clear_memory</code> function to clear memory before loading the model, ensuring there is enough free memory available.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p><strong>End</strong>:</p>
+<p><code>scaler = GradScaler()</code>:</p>
 <div class="ulist">
 <ul>
 <li>
-<p><code>FlaskApp</code> deactivates itself after completing the process.</p>
+<p>Initializes a <code>GradScaler</code> instance for scaling gradients during mixed precision training, preventing underflow and maintaining training stability.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>with autocast():</code>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Uses the <code>autocast</code> context manager to enable mixed precision for the operations within the block, reducing memory usage and improving performance.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>model, vis_processors, _ = load_model_and_preprocess(name="blip2_t5", model_type="pretrain_flant5xxl", is_eval=True, device="cpu")</code>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Loads the model and preprocessing components. Initially loads the model on the CPU to avoid GPU memory issues during the loading process.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>if hasattr(model, 'gradient_checkpointing_enable'):</code>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Checks if the model supports gradient checkpointing, a technique that saves memory during training by trading compute for memory.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>model = accelerator.prepare(model)</code>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Prepares the model with the <code>Accelerator</code> instance, optimizing it for the available hardware and mixed precision.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>clear_memory()</code>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Calls the <code>clear_memory</code> function again to free up memory in case of an error, attempting to mitigate memory issues.</p>
 </li>
 </ul>
 </div>
 </li>
 </ol>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_summary">Summary</h3>
-<div class="paragraph">
-<p>The sequence diagram outlines the process of generating captions for images or videos. The user sends a request to the <code>FlaskApp</code>, which checks for authorization and then interacts with <code>AwsS3</code> to fetch the file. Depending on the file type, the <code>FlaskApp</code> uses either <code>ImageCaptionGenerator</code> or <code>VideoCaptionGenerator</code> to generate a caption and then returns the caption to the user.</p>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-<div class="sect2">
-<h3 id="_component_diagramcomplete_application"><strong>Component Diagram&#8201;&#8212;&#8201;Complete Application</strong></h3>
-<div class="imageblock">
-<div class="content">
-<img src="./../docs/generate_image_video_caption_component_diagram.png" alt="Generate Image Video Caption Component Diagram">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_usecase_diagram"><strong>Usecase Diagram</strong></h3>
-<div class="imageblock">
-<div class="content">
-<img src="./../docs/generate_image_video_captioning_usecase_diagram.png" alt="Generate Image Video Caption Usecase Diagram">
-</div>
 </div>
 </div>
 </div>
