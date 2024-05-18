@@ -46,15 +46,17 @@ jobs:
         run: |
           asciidoctor -r asciidoctor-pdf -r asciidoctor-diagram -b pdf 02_Software_Arch/software_arch.adoc -o docs/software_arch.pdf
           asciidoctor -o docs/software_arch.html 02_Software_Arch/software_arch.adoc
+          asciidoctor -r asciidoctor-pdf -r asciidoctor-diagram -b pdf Research_Benchmarking/blip2.adoc -o docs/blip2_benchmarking.pdf
+          asciidoctor -o docs/blip2_benchmarking.html Research_Benchmarking/blip2.adoc
 
       - name: Commit and Push Documentation
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add docs/software_arch.pdf
-          git add docs/software_arch.html
+          git add docs/*.pdf
+          git add docs/*.html
           git add docs/*.png
-          git commit -m "Update project proposal PDF, HTML documentation, and PlantUML diagrams"
+          git commit -m "WIP benchmarking documentation."
           git -c http.extraHeader="AUTHORIZATION: basic $(echo -n x-access-token:${GITHUB_TOKEN} | base64)" push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
