@@ -746,13 +746,139 @@ except RuntimeError as e:
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>This process of model loading is not only limited to the loading of the <code>pretrain_flant5xxl</code> model rather we have also
+used the same strategy to load even smaller models like <code>pretrain_flant5xl</code> and <code>caption_coco_flant5xl</code></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_section_3_benchmarking">Section 3: Benchmarking</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We will start the benchmarking comparison based on the following factors:
+* Model Size
+* Model Loading time
+* Model Inference timing and accuracy
+* Captioning
+* Non deterministic Necleus sampling Captioning</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2858%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">BLIP2 Model Versions</th>
+<th class="tableblock halign-left valign-top">Model Size</th>
+<th class="tableblock halign-left valign-top">Model Loading Time</th>
+<th class="tableblock halign-left valign-top">Model Saving Time</th>
+<th class="tableblock halign-left valign-top">Inference Time</th>
+<th class="tableblock halign-left valign-top">Caption</th>
+<th class="tableblock halign-left valign-top">Non-Deterministic Nucleus Sampling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pretrain_flant5xxl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~48 GB</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~18 Mins</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~10 Mins</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~8 Mins</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a lion laying down in the grass</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a lion laying down in the grass (same 3 captions in ~21 Minutes)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pretrain_flant5xl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~15.4 GB</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CPU: 3 Mins 52.1 Sec
+  GPU: 1 Min 40 Sec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CPU: 1 Min 42.9 Sec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">28 Sec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a lion laying down in the grass</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a lion laying down in the grass (same 3 captions in 52 secs)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">caption_coco_flant5xl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~4 GB</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CPU: 4 Mins 15.9 Sec
+  GPU: 1 Min 48 Sec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CPU: 1 Min 48.9 Sec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">43 Sec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a lion laying down in a grassy field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a lion laying down in a grassy field (same 3 captions in 1 Minute 16 secs)</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2858%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Metric</th>
+<th class="tableblock halign-left valign-top">pretrain_flant5xxl (CPU)</th>
+<th class="tableblock halign-left valign-top">pretrain_flant5xxl (GPU)</th>
+<th class="tableblock halign-left valign-top">pretrain_flant5xl (CPU)</th>
+<th class="tableblock halign-left valign-top">pretrain_flant5xl (GPU)</th>
+<th class="tableblock halign-left valign-top">caption_coco_flant5xl (CPU)</th>
+<th class="tableblock halign-left valign-top">caption_coco_flant5xl (GPU)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Model Loading Time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~18 Mins</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N/A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3 Mins 52.1 Sec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1 Min 40 Sec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4 Mins 15.9 Sec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1 Min 48 Sec</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Model Saving Time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~10 Mins</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N/A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1 Min 42.9 Sec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N/A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1 Min 48.9 Sec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N/A</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Inference Time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~8 Mins</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N/A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">28 Sec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N/A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">43 Sec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N/A</p></td>
+</tr>
+</tbody>
+</table>
+<div class="imageblock">
+<div class="content">
+<img src="Benchmarking.png" alt="Generate Image Video Caption Component Diagram">
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-18 01:39:23 UTC
+Last updated 2024-05-18 03:56:55 UTC
 </div>
 </div>
 </body>
