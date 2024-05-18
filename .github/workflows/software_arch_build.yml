@@ -56,7 +56,7 @@ jobs:
           git add docs/*.pdf
           git add docs/*.html
           git add docs/*.png
-          git commit -m "WIP benchmarking documentation."
+          git commit -m "Benchmarking documentation."
           git -c http.extraHeader="AUTHORIZATION: basic $(echo -n x-access-token:${GITHUB_TOKEN} | base64)" push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
