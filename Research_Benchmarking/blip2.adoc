@@ -16,11 +16,14 @@ The Lavis project provides a comprehensive guide of link:{notebook-url}[instruct
 The guide uses the default model `pretrain_flant5xxl`, which is the largest, around 48 GB.
 Without a doubt, this model performs the best, giving captions like:
 
-_*Write a romantic message that goes along with this photo.*_
+*_Write a romantic message that goes along with this photo._*
 
-_*Love is like a sunset, it's hard to see it coming, but when it does, it's so beautiful.*_
+*_Love is like a sunset, it's hard to see it coming, but when it does, it's so beautiful._*`
 
-However, the model warns the user by stating, _*Large RAM is required to load the larger models. Running on a GPU can optimize inference speed.*_ 
+However, the model warns the user by stating,
+
+*_Large RAM is required to load the larger models. Running on a GPU can optimize inference speed._*
+
 without providing any context or explanation of the terms "Large RAM," "GPU," and "CPU" usage.
 
 
@@ -40,6 +43,8 @@ The Lavis project provides 7 models for BLIP2 captioning. The models are listed 
 
 The Lavis project uses the pretrain_flant5xxl model to demonstrate the best-performing model.
 Following code snippet is suggested to use in order to load the pretrained model.
+
+<<<
 
 [source,python]
 ----
@@ -69,7 +74,7 @@ It is crucial to note that the error occurred with the below hardware specificat
 | GPU Memory
 | 8 GB (GDDR5)
 |===
-
+<<<
 We have circumvented this problem by implementing the following code:
 
 [source,python]
@@ -157,41 +162,52 @@ We will start the benchmarking comparison based on the following factors:
 * Non deterministic Necleus sampling Captioning
 
 |===
-| BLIP2 Model Versions  | Model Size | Model Loading Time | Model Saving Time | Inference Time | Caption | Non-Deterministic Nucleus Sampling
+| BLIP2 Model Versions | Input Image Dimension | Model Size | Model Loading Time | Model Saving Time | Inference Time | Caption | Non-Deterministic Nucleus Sampling
 
-| pretrain_flant5xxl    
+| pretrain_flant5xxl
+| 224 * 224    
 | ~48 GB     
 | ~18 Mins    
 | ~10 Mins   
 | ~8 Mins 
 | a lion laying down in the grass
-| a lion laying down in the grass (same 3 captions in ~21 Minutes)
+| a lion laying down in the grass +
 
-| pretrain_flant5xl     
+(same 3 captions in ~21 Minutes)
+
+| pretrain_flant5xl
+| 224 * 224     
 | ~15.4 GB   
-| CPU: 3 Mins 52.1 Sec
-  GPU: 1 Min 40 Sec  
+|`CPU: 3 Mins 52.1 Sec` +
+
+`GPU: 1 Min 40 Sec`
 | CPU: 1 Min 42.9 Sec  
 | 28 Sec   
 | a lion laying down in the grass  
-| a lion laying down in the grass (same 3 captions in 52 secs)
+| a lion laying down in the grass +
 
-| caption_coco_flant5xl 
+(same 3 captions in 52 secs)
+
+| caption_coco_flant5xl
+| 364 * 364
 | ~4 GB      
-| CPU: 4 Mins 15.9 Sec
-  GPU: 1 Min 48 Sec   
+|`CPU: 4 Mins 15.9 Sec` +
+
+`GPU: 1 Min 48 Sec`
 | CPU: 1 Min 48.9 Sec  
 | 43 Sec   
 | a lion laying down in a grassy field  
-| a lion laying down in a grassy field (same 3 captions in 1 Minute 16 secs)
+| a lion laying down in a grassy field +
+
+(same 3 captions in 1 Minute 16 secs)
 |===
 
 |===
 | Metric | pretrain_flant5xxl (CPU) | pretrain_flant5xxl (GPU) | pretrain_flant5xl (CPU) | pretrain_flant5xl (GPU) | caption_coco_flant5xl (CPU) | caption_coco_flant5xl (GPU)
 
 | Model Loading Time
-| ~18 Mins
 | N/A
+| ~15-18 Mins
 | 3 Mins 52.1 Sec
 | 1 Min 40 Sec
 | 4 Mins 15.9 Sec
