@@ -462,14 +462,19 @@ The Lavis project provides a comprehensive guide of <a href="https://github.com/
 Without a doubt, this model performs the best, giving captions like:</p>
 </div>
 <div class="paragraph">
-<p><em>*Write a romantic message that goes along with this photo.*</em></p>
+<p><strong><em>Write a romantic message that goes along with this photo.</em></strong></p>
 </div>
 <div class="paragraph">
-<p><em>*Love is like a sunset, it&#8217;s hard to see it coming, but when it does, it&#8217;s so beautiful.*</em></p>
+<p><strong><em>Love is like a sunset, it&#8217;s hard to see it coming, but when it does, it&#8217;s so beautiful.</em></strong>`</p>
 </div>
 <div class="paragraph">
-<p>However, the model warns the user by stating, <em>*Large RAM is required to load the larger models. Running on a GPU can optimize inference speed.*</em>
-without providing any context or explanation of the terms "Large RAM," "GPU," and "CPU" usage.</p>
+<p>However, the model warns the user by stating,</p>
+</div>
+<div class="paragraph">
+<p><strong><em>Large RAM is required to load the larger models. Running on a GPU can optimize inference speed.</em></strong></p>
+</div>
+<div class="paragraph">
+<p>without providing any context or explanation of the terms "Large RAM," "GPU," and "CPU" usage.</p>
 </div>
 </div>
 </div>
@@ -534,6 +539,7 @@ without providing any context or explanation of the terms "Large RAM," "GPU," an
 <p>The Lavis project uses the pretrain_flant5xxl model to demonstrate the best-performing model.
 Following code snippet is suggested to use in order to load the pretrained model.</p>
 </div>
+<div style="page-break-after: always;"></div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-python" data-lang="python">model, vis_processors, _ = load_model_and_preprocess(
@@ -581,6 +587,7 @@ PYTORCH_CUDA_ALLOC_CONF</code></pre>
 </tr>
 </tbody>
 </table>
+<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p>We have circumvented this problem by implementing the following code:</p>
 </div>
@@ -766,17 +773,19 @@ used the same strategy to load even smaller models like <code>pretrain_flant5xl<
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 14.2857%;">
-<col style="width: 14.2857%;">
-<col style="width: 14.2857%;">
-<col style="width: 14.2857%;">
-<col style="width: 14.2857%;">
-<col style="width: 14.2857%;">
-<col style="width: 14.2858%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">BLIP2 Model Versions</th>
+<th class="tableblock halign-left valign-top">Input Image Dimension</th>
 <th class="tableblock halign-left valign-top">Model Size</th>
 <th class="tableblock halign-left valign-top">Model Loading Time</th>
 <th class="tableblock halign-left valign-top">Model Saving Time</th>
@@ -788,32 +797,38 @@ used the same strategy to load even smaller models like <code>pretrain_flant5xl<
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">pretrain_flant5xxl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">224 * 224</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">~48 GB</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">~18 Mins</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">~10 Mins</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">~8 Mins</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">a lion laying down in the grass</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">a lion laying down in the grass (same 3 captions in ~21 Minutes)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a lion laying down in the grass<br></p>
+<p class="tableblock">(same 3 captions in ~21 Minutes)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">pretrain_flant5xl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">224 * 224</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">~15.4 GB</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CPU: 3 Mins 52.1 Sec
-  GPU: 1 Min 40 Sec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CPU: 3 Mins 52.1 Sec</code><br></p>
+<p class="tableblock"><code>GPU: 1 Min 40 Sec</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">CPU: 1 Min 42.9 Sec</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">28 Sec</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">a lion laying down in the grass</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">a lion laying down in the grass (same 3 captions in 52 secs)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a lion laying down in the grass<br></p>
+<p class="tableblock">(same 3 captions in 52 secs)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">caption_coco_flant5xl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">364 * 364</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">~4 GB</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CPU: 4 Mins 15.9 Sec
-  GPU: 1 Min 48 Sec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CPU: 4 Mins 15.9 Sec</code><br></p>
+<p class="tableblock"><code>GPU: 1 Min 48 Sec</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">CPU: 1 Min 48.9 Sec</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">43 Sec</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">a lion laying down in a grassy field</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">a lion laying down in a grassy field (same 3 captions in 1 Minute 16 secs)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a lion laying down in a grassy field<br></p>
+<p class="tableblock">(same 3 captions in 1 Minute 16 secs)</p></td>
 </tr>
 </tbody>
 </table>
@@ -841,8 +856,8 @@ used the same strategy to load even smaller models like <code>pretrain_flant5xl<
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Model Loading Time</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">~18 Mins</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">N/A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">~15-18 Mins</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">3 Mins 52.1 Sec</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1 Min 40 Sec</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">4 Mins 15.9 Sec</p></td>
@@ -878,7 +893,7 @@ used the same strategy to load even smaller models like <code>pretrain_flant5xl<
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-18 04:12:26 UTC
+Last updated 2024-05-18 10:44:00 UTC
 </div>
 </div>
 </body>
