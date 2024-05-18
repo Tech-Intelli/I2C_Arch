@@ -144,3 +144,74 @@ except RuntimeError as e:
 
 11. `clear_memory()`:
     - Calls the `clear_memory` function again to free up memory in case of an error, attempting to mitigate memory issues.
+
+This process of model loading is not only limited to the loading of the `pretrain_flant5xxl` model rather we have also
+used the same strategy to load even smaller models like `pretrain_flant5xl` and `caption_coco_flant5xl`
+
+== Section 3: Benchmarking
+We will start the benchmarking comparison based on the following factors: 
+* Model Size
+* Model Loading time
+* Model Inference timing and accuracy
+* Captioning
+* Non deterministic Necleus sampling Captioning
+
+|===
+| BLIP2 Model Versions  | Model Size | Model Loading Time | Model Saving Time | Inference Time | Caption | Non-Deterministic Nucleus Sampling
+
+| pretrain_flant5xxl    
+| ~48 GB     
+| ~18 Mins    
+| ~10 Mins   
+| ~8 Mins 
+| a lion laying down in the grass
+| a lion laying down in the grass (same 3 captions in ~21 Minutes)
+
+| pretrain_flant5xl     
+| ~15.4 GB   
+| CPU: 3 Mins 52.1 Sec
+  GPU: 1 Min 40 Sec  
+| CPU: 1 Min 42.9 Sec  
+| 28 Sec   
+| a lion laying down in the grass  
+| a lion laying down in the grass (same 3 captions in 52 secs)
+
+| caption_coco_flant5xl 
+| ~4 GB      
+| CPU: 4 Mins 15.9 Sec
+  GPU: 1 Min 48 Sec   
+| CPU: 1 Min 48.9 Sec  
+| 43 Sec   
+| a lion laying down in a grassy field  
+| a lion laying down in a grassy field (same 3 captions in 1 Minute 16 secs)
+|===
+
+|===
+| Metric | pretrain_flant5xxl (CPU) | pretrain_flant5xxl (GPU) | pretrain_flant5xl (CPU) | pretrain_flant5xl (GPU) | caption_coco_flant5xl (CPU) | caption_coco_flant5xl (GPU)
+
+| Model Loading Time
+| ~18 Mins
+| N/A
+| 3 Mins 52.1 Sec
+| 1 Min 40 Sec
+| 4 Mins 15.9 Sec
+| 1 Min 48 Sec
+
+| Model Saving Time
+| ~10 Mins
+| N/A
+| 1 Min 42.9 Sec
+| N/A
+| 1 Min 48.9 Sec
+| N/A
+
+| Inference Time
+| ~8 Mins
+| N/A
+| 28 Sec
+| N/A
+| 43 Sec
+| N/A
+|===
+
+image::Benchmarking.png[Generate Image Video Caption Component Diagram]
