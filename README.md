@@ -9,6 +9,7 @@ This architectural document will contain software and system architectures.
 [![Organisation](https://img.shields.io/badge/Architecture-blue)](https://github.com/Tech-Intelli/I2C_Orga)
 
 [View Architecture Documentation](docs/software_arch.pdf)
+
 [View Benchmarking Documentation](docs/blip2_benchmarking.pdf)
 
 ## Sequence Diagram
