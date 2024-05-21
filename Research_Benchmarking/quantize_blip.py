@@ -125,6 +125,9 @@ def load_state_dict(base_state_dict, quantized_state_dict):
     filtered_state_dict = {k: v for k, v in quantized_state_dict.items() if k in base_state_dict}
     base_state_dict.update(filtered_state_dict)
     return base_state_dict
+def save_filtered_state_dict(base_state_dict, quantized_state_dict, filtered_dict_path):
+    filtered_dict = load_state_dict(base_state_dict, quantized_state_dict)
+    torch.save(filtered_dict.state_dict(), filtered_dict_path)
 def load_quantized_model(base_model_path, quantized_model_path):
     model = initialize_quantized_blip2_model()
     base_model = torch.load(base_model_path, map_location=device)
@@ -149,7 +152,7 @@ try:
         quantized_model = load_quantized_model("base_model_state_dict.pth", "model_state_dict_caption_coco_flant5xl_quantized.pth")
         quantized_model.to(device).half()
         quantized_model = accelerator.prepare(quantized_model)
-        print(f"Model dtype after loading and before inference: {next(quantized_model.parameters()).dtype}")  # Check the dtype of model parameters
+        print(f"Model dtype after loading and before inference: {next(quantized_model.parameters()).dtype}")
 except RuntimeError as e:
         print(f"Error during model loading: {e}")
         clear_memory()
